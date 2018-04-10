@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to WebGL</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- sanshishen 2018-03-17 23:50:45 -->
+    <style type="text/css">
+        h1 {
+            text-align: center;
+        }
+        #container, #prompt {
+            position: absolute;
+            width: 95%;
+            height: 80%;
+            bottom: 0;
+        }
+        #prompt {
+            height: 6%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to WEBGL!</h1>
+    <div id="container"></div>
+    <div id="prompt">Click to animate the cube</div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/three.js/90/three.js"></script>
+    <script type="text/javascript" src="./assets/js/utils.js"></script>
+    <script type="text/javascript">
+        var renderer = null,
+            scene = null,
+            camera = null,
+            cube = null,
+            animating = false;
+        window.onload = function() {
+            // 抓取作为canvas容器的div标签
+            var container = document.querySelector( '#container' );
+
+            // 创建Three.js渲染器，并添加到div标签中
+            // antialias 是否开启抗锯齿
+            renderer = new THREE.WebGLRenderer( { antialias: true } );
+            renderer.setSize( container.offsetWidth, container.offsetHeight );
+            container.appendChild( renderer.domElement );
+
+            // 创建Three.js场景
+            scene = new THREE.Scene();
+
+            // 创建相机，并添加到场景中
+            camera = new THREE.PerspectiveCamera( 45, 
+                container.offsetWidth / container.offsetHeight, 1, 4000 );
+            camera.position.set( 0, 0, 3 );
+
+            // 创建一个平行光光源照射到物体上
+            var light = new THREE.DirectionalLight( 0xffffff, 1.5 );
+            light.position.set( 0, 0, 1 );
+            scene.add( light );
+
+            // 创建一个接受光照并带有纹理映射的立方体，并添加到场景中
+            // 首先，创建一个带纹理映射的立方体
+            var mapUrl = '../assets/images/molumen_small_funny_angry_monster.jpg',
+                map = THREE.ImageUtils.loadTexture(mapUrl);
+
+            // 然后创建一个Phong材质来处理着色，并传递给纹理映射
+            var material = new THREE.MeshPhongMaterial( { map: map } );
+
+            // 创建一个立方体的几何体
+            var geometry = new THREE.CubeGeometry( 1, 1, 1 );
+
+            // 将几何体和材质放到一个网格中
+            cube = new THREE.Mesh( geometry, material );
+
+            // 设置网格在场景中的朝向，否则将看不到立方体的形状
+            cube.rotation.x = Math.PI / 5;
+            cube.rotation.y = Math.PI / 5;
+
+            // 将立方体网格添加到场景中
+            scene.add( cube );
+
+            // 添加处理鼠标事件的函数，用于控制动画的开关
+            addMouseHandler();
+
+            // 运行渲染循环
+            run();
+        };
+
+        function run() {
+            // 渲染场景
+            renderer.render( scene, camera );
+            
+            // 在下一帧中旋转立方体
+            if (animating) {
+                cube.rotation.y -= 0.01;
+            }
+
+            // 在另一帧中回调
+            requestAnimationFrame( run );
+        }
+
+        function addMouseHandler() {
+            var dom = renderer.domElement;
+
+            dom.addEventListener( 'mouseup', onMouseUp, false );
+        }
+
+        function onMouseUp(event) {
+            event.preventDefault();
+            animating = !animating;
+        }
+    </script>
+</body>
+</html>

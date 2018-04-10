@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>create canvas and context</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- sanshishen 2018-03-11 16:28:34 -->
+</head>
+<body>
+    <canvas id="webglCanvas" width="500" height="500"></canvas>
+    <script src="./assets/js/utils.js"></script>
+    <script type="text/javascript">
+        var modelViewMatrix, projectionMatrix;
+        /**
+         * 设置模型视图矩阵和投影矩阵
+         */
+        function initMatrices() {
+            // 正方形的变换矩阵——相对于相机沿着z轴稍微后移一些
+            modelViewMatrix = new Float32Array([
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, -3.33, 1
+            ]);
+            // 变换矩阵（45度视野）
+            projectionMatrix = new Float32Array([
+                2.41421, 0, 0, 0,
+                0, 2.41421, 0, 0,
+                0, 0, -1.002002, -1,
+                0, 0, -0.2002002, 0
+            ]);
+        }
+        // 创建用于绘制正方形的顶点数据
+        function createSquare(gl) {
+            var vertexBuffer;
+            vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            var verts = [
+                .5, .5, 0.0,
+                -.5, .5, 0.0,
+                .5, -.5, 0.0,
+                -.5, -.5, 0.0
+            ];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+            var square = {
+                buffer: vertexBuffer,
+                vertSize: 3,
+                nVerts: 4,
+                primtype: gl.TRIANGLE_STRIP
+            };
+            return square;
+        }
+        // 定义一个顶点着色器代码
+        var vertexShaderSource = 
+            '   attribute vec3 vertexPos;\n' +
+            '   uniform mat4 modelViewMatrix;\n' +
+            '   uniform mat4 projectionMatrix;\n' +
+            '   void main(void) {\n' +
+            '       // 返回变换并投影后的顶点数据\n' +
+            '       gl_Position = projectionMatrix * modelViewMatrix * \n' +
+            '           vec4(vertexPos, 1.0);\n' +
+            '   }\n';
+        // 定义一个片元着色器（像素着色器）代码
+        var fragmentShaderSource = 
+            '   void main(void) {\n' +
+            '       // 返回像素颜色：永远输出白色\n' +
+            '       gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n' +
+            '   }\n';
+        
+        var shaderProgram,
+            shaderVertexPositionAttribute,
+            shaderProjectionMatrixUniform,
+            shaderModelViewMatrixUniform;
+        
+        function initShader(gl) {
+            // 加载和编译片元及顶点着色器
+            var fragmentShader = createShader(gl, fragmentShaderSource, 'fragment'),
+                vertexShader = createShader(gl, vertexShaderSource, 'vertex');
+            
+            // 把所有元素都链接进一段新的程序指令
+            shaderProgram = gl.createProgram();
+            gl.attachShader(shaderProgram, vertexShader);
+            gl.attachShader(shaderProgram, fragmentShader);
+            gl.linkProgram(shaderProgram);
+
+            // get pointers to the shader params
+            shaderVertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'vertexPos');
+            gl.enableVertexAttribArray(shaderVertexPositionAttribute);
+
+            shaderProjectionMatrixUniform = gl.getUniformLocation(shaderProgram, 'projectionMatrix');
+            shaderModelViewMatrixUniform = gl.getUniformLocation(shaderProgram, 'modelViewMatrix');
+
+            if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+                alert('Could not initialise shaders');
+            }
+        }
+        
+        function draw(gl, obj) {
+            // 使用黑色清空背景
+            gl.clearColor(0.0, 0.0, 0.0, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            // 设置顶点数组
+            gl.bindBuffer(gl.ARRAY_BUFFER, obj.buffer);
+
+            // 设置着色器
+            gl.useProgram(shaderProgram);
+
+            // 设置着色器参数：顶点坐标、投影矩阵和模型视图矩阵
+            gl.vertexAttribPointer(shaderVertexPositionAttribute, obj.vertSize, gl.FLOAT, false, 0, 0);
+            gl.uniformMatrix4fv(shaderProjectionMatrixUniform, false, projectionMatrix);
+            gl.uniformMatrix4fv(shaderModelViewMatrixUniform, false, modelViewMatrix);
+
+            // 绘制物体
+            gl.drawArrays(obj.primtype, 0, obj.nVerts);
+        }
+        window.onload = function () {
+            var canvas = document.querySelector('#webglCanvas'),
+                gl = initWebGL(canvas);
+            initViewport(gl, canvas);
+            initMatrices();
+            var square = createSquare(gl);
+            initShader(gl);
+            draw(gl, square);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>a simple three.js page</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- sanshishen 2018-03-16 18:33:47 -->
+    <style type="text/css">
+        #container {
+            width: 500px;
+            height: 500px;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/three.js/90/three.js"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            // 获取容器
+            var container = document.querySelector( '#container' );
+
+            // 创建three.js渲染器，并添加到div标签中
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( container.offsetWidth, container.offsetHeight );
+            container.appendChild( renderer.domElement );
+
+            // 创建three.js场景
+            var scene = new THREE.Scene();
+
+            // 创建相机，并添加到场景中
+            var camera = new THREE.PerspectiveCamera( 45,
+                    container.offsetWidth / container.offsetHeight, 1, 4000 );
+            camera.position.set( 0, 0, 3.333 );
+            scene.add( camera );
+
+            // 创建一个矩形几何体，并添加到场景中
+            var geometry = new THREE.PlaneGeometry( 1, 1 ),
+                mesh = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial() );
+            scene.add( mesh );
+
+            // 渲染绘制
+            renderer.render( scene, camera );
+        }
+    </script>
+</body>
+</html>
