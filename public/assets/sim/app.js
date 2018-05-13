@@ -3,7 +3,7 @@
  * @date    2018-03-20 14:06:26
  * @version 1.0.0
  */
-define(['sim/publisher', 'jquery'], function (Publisher, $) {
+define(['sim/publisher', 'jquery', 'jquery.mousewheel'], function (Publisher, $) {
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = (function() {
             return window.webkitRequestAnimationFrame ||
@@ -48,14 +48,14 @@ define(['sim/publisher', 'jquery'], function (Publisher, $) {
         scene.add(root);
 
         // 创建一个投影（坐标转换？），用于处理拖拽
-        var projector = new THREE.Projector();
+        // var projector = new THREE.Projector();
 
         // 保存实例对象
         this.container = container;
         this.renderer = renderer;
         this.scene = scene;
         this.camera = camera;
-        this.projector = projector;
+        // this.projector = projector;
         this.root = root;
 
         // 开启事件处理
@@ -69,6 +69,12 @@ define(['sim/publisher', 'jquery'], function (Publisher, $) {
         this.renderer.render(this.scene, this.camera);
         var self = this;
         requestAnimationFrame(function () { self.run(); });
+    };
+    App.prototype.update = function() {
+        var i, len = this.objects.length;
+        for (i = 0; i < len; i ++) {
+            this.objects[i].update();
+        }
     };
     // 添加对象
     App.prototype.addObject = function (obj) {
@@ -201,10 +207,10 @@ define(['sim/publisher', 'jquery'], function (Publisher, $) {
             vpy = - (elty / this.container.offsetHeight) * 2 + 1;
         
         var vector = new THREE.Vector3(vpx, vpy, 0.5);
-        this.projector.unprojectVector(vector, this.camera);
+        vector.unproject(this.camera);
 
-        var ray = new THREE.Ray(this.camera.position, vector.subSelf(this.camera.position).normalize()),
-            intersects = ray.intersectScene(this.scene);
+        var ray = new THREE.Raycaster(this.camera.position, vector.sub(this.camera.position).normalize()),
+            intersects = ray.intersectObject(this.scene);
         if (intersects.length > 0) {
             var i = 0;
             while (!intersects[i].object.visible) {
