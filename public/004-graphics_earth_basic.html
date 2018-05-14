@@ -26,17 +26,8 @@
     <div id="container"></div>
     <script type="text/javascript" src="https://cdn.bootcss.com/three.js/90/three.js"></script>
     <script type="text/javascript" src="./assets/js/require-2.3.5.min.js"></script>
+    <script type="text/javascript" src="./assets/js/common.js"></script>
     <script type="text/javascript">
-        require.config({
-            baseUrl: '/assets/',
-            paths: {
-                'jquery': 'js/jquery-3.3.1.min',
-                'jquery.mousewheel': 'js/jquery.mousewheel-3.1.13.min'
-            },
-            shim: {
-                'jquery.mousewheel': ['jquery']
-            }
-        });
         require(['js/earth-basic', 'jquery'], function (EarthApp, $) {
             var renderer = null,
                 scene = null,
