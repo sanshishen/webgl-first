@@ -39,7 +39,7 @@ define(function () {
                 for (var j = 0; j < arguments.length - 1; j ++) {
                     args.push(arguments[j + 1]);
                 }
-                subscribers[i].callback.apply(subscribers[i],subscriber, args);
+                subscribers[i].callback.apply(subscribers[i], subscriber, args);
             }
         }
     };

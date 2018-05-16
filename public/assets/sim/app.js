@@ -33,6 +33,7 @@ define(['sim/publisher', 'jquery', 'jquery.mousewheel'], function (Publisher, $)
         container.appendChild( renderer.domElement );
         // 创建一个新的场景
         var scene = new THREE.Scene();
+        // 添加一个环境光
         scene.add(new THREE.AmbientLight(0x505050));
         scene.data = this;
 
@@ -47,15 +48,11 @@ define(['sim/publisher', 'jquery', 'jquery.mousewheel'], function (Publisher, $)
         var root = new THREE.Object3D();
         scene.add(root);
 
-        // 创建一个投影（坐标转换？），用于处理拖拽
-        // var projector = new THREE.Projector();
-
         // 保存实例对象
         this.container = container;
         this.renderer = renderer;
         this.scene = scene;
         this.camera = camera;
-        // this.projector = projector;
         this.root = root;
 
         // 开启事件处理
