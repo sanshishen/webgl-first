@@ -18,7 +18,7 @@ define(['sim/sim'], function (Sim) {
             // material = new THREE.MeshBasicMaterial({map: texture}),
             material = new THREE.MeshPhongMaterial( {map: texture} ),
             mesh = new THREE.Mesh( geometry, material );
-        mesh.rotation.x = Earth.TILT;
+        mesh.rotation.z = Earth.TILT;
         this.setObject3D(mesh);
     };
 
