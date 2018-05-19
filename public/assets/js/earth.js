@@ -3,7 +3,7 @@
  * @date    2018-05-18 17:53:23
  * @version 1.0.0
  */
-define(['sim/sim'], function (Sim) {
+define(['sim/sim', 'js/static', 'js/moon'], function (Sim, STATIC, Moon) {
     var Earth = function() {
         Sim.Object.call(this);
     };
@@ -20,6 +20,9 @@ define(['sim/sim'], function (Sim) {
         // 添加地球对象和云层对象
         this.createGlobe();
         this.createClouds();
+
+        // 添加月球
+        this.createMoon();
     };
 
     Earth.prototype.createGlobe = function() {
@@ -39,7 +42,7 @@ define(['sim/sim'], function (Sim) {
         var globeMesh = new THREE.Mesh( globeGeometry, material );
 
         // 倾斜地球
-        globeMesh.rotation.x = Earth.TILT;
+        globeMesh.rotation.x = STATIC.Earth.TILT;
 
         // 添加到群组中
         this.object3D.add(globeMesh);
@@ -53,9 +56,9 @@ define(['sim/sim'], function (Sim) {
         var cloudsMap = new THREE.TextureLoader().load( '/assets/images/earth_clouds_1024.png' ),
             cloudsMaterial = new THREE.MeshLambertMaterial( { color: 0xffffff, map: cloudsMap, transparent: true } );
 
-        var cloudsGeometry = new THREE.SphereGeometry( Earth.CLOUDS_SCALE, 32, 32 ),
+        var cloudsGeometry = new THREE.SphereGeometry( STATIC.Earth.CLOUDS_SCALE, 32, 32 ),
             cloudsMesh = new THREE.Mesh( cloudsGeometry, cloudsMaterial );
-        cloudsMesh.rotation.x = Earth.TILT;
+        cloudsMesh.rotation.x = STATIC.Earth.TILT;
 
         // 添加到群组
         this.object3D.add( cloudsMesh );
@@ -64,20 +67,21 @@ define(['sim/sim'], function (Sim) {
         this.cloudsMesh = cloudsMesh;
     };
 
+    Earth.prototype.createMoon = function() {
+        var moon = new Moon();
+        moon.init();
+        this.addChild(moon);
+    };
+
     Earth.prototype.update = function() {
         // 地球旋转
-        this.globeMesh.rotation.y += Earth.ROTATION_Y;
+        this.globeMesh.rotation.y += STATIC.Earth.ROTATION_Y;
 
         // 云层旋转
-        this.cloudsMesh.rotation.y += Earth.CLOUDS_ROTATION_Y;
+        this.cloudsMesh.rotation.y += STATIC.Earth.CLOUDS_ROTATION_Y;
 
         Sim.Object.prototype.update.call(this);
     };
-
-    Earth.ROTATION_Y = 0.001;
-    Earth.TILT = 0.41;
-    Earth.CLOUDS_SCALE = 1.005;
-    Earth.CLOUDS_ROTATION_Y = Earth.ROTATION_Y * 0.95;
 
     return Earth;
 });
