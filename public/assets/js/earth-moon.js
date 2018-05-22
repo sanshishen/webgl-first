@@ -3,7 +3,7 @@
  * @date    2018-05-18 17:22:12
  * @version 1.0.0
  */
-define(['sim/sim', 'js/earth'], function (Sim, Earth) {
+define(['sim/sim', 'js/earthWithMoon'], function (Sim, Earth) {
     var Sun = function () {
         Sim.Object.call(this);
     };

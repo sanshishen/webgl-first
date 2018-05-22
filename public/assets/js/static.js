@@ -20,8 +20,13 @@ define(function() {
     };
     Moon.SIZE_IN_EARTHS = 1 / 3.7 * Moon.EXAGGERATE_FACTOR;
 
+    var Planet = {
+        REVOLUTION_Y: 0.003
+    };
+
     return {
         Earth: Earth,
-        Moon: Moon
+        Moon: Moon,
+        Planet: Planet
     };
 });
