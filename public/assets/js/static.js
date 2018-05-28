@@ -27,9 +27,14 @@ define(function() {
         REVOLUTION_Y: 0.003
     };
 
+    var Orbit = {
+        N_SEGMENTS: 120
+    };
+
     return {
         Earth: Earth,
         Moon: Moon,
-        Planet: Planet
+        Planet: Planet,
+        Orbit: Orbit
     };
 });

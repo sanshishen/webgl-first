@@ -3,7 +3,7 @@
  * @date    2018-05-26 16:28:02
  * @version 1.0.0
  */
-define(['sim/sim', 'js/static'], function(Sim, STATIC) {
+define(['sim/sim', 'js/static', 'js/orbit'], function(Sim, STATIC, Orbit) {
     function Moon() {
         Sim.Object.call(this);
     }
@@ -135,7 +135,23 @@ define(['sim/sim', 'js/static'], function(Sim, STATIC) {
         moon.setPosition(Math.sqrt(distsquared / 2), 0, -Math.sqrt(distsquared / 2));
     };
     Earth.prototype.createMoonOrbit = function(distance, size) {
-        // TODO ==
+        var moonOrbit = new Orbit();
+        moonOrbit.init(STATIC.Moon.DISTANCE_FROM_EARTH / Earth.RADIUS / size);
+        this.addChild(moonOrbit);
+        var distsquared = distance * distance;
+        moonOrbit.setPosition(Math.sqrt(distsquared / 2), 0, -Math.sqrt(distsquared / 2));
+    };
+    Earth.prototype.update = function() {
+        if (this.animateOrbit) {
+            this.object3D.rotation.y += this.revolutionSpeed;
+        }
+        if (this.animateRotation) {
+            this.globeMesh.rotation.y += this.rotationSpeed;
+            if (this.cloudsMesh) {
+                this.cloudsMesh.rotation.y += this.cloudsRotationSpeed;
+            }
+        }
+        Sim.Object.prototype.update.call(this);
     };
     return Earth;
 });
