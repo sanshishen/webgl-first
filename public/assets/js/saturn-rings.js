@@ -1,12 +1,10 @@
 /**
  * 土星环
- * @author  sanshishen
- * @email   sanshishen@qq.com
  * @date    2018-05-20 16:32:31
  * @version 1.0.0
  */
 define(function() {
-    var SaturnRings = function( innerRadius, outerRadius, nSegments ) {
+    function SaturnRings( innerRadius, outerRadius, nSegments ) {
         THREE.Geometry.call(this);
 
         var outerRadius = outerRadius || 1,
@@ -35,31 +33,32 @@ define(function() {
                 v3 = new THREE.Vector3( fX3, fY3, 0 ),
                 v4 = new THREE.Vector3( fX4, fY4, 0 );
 
-            this.vertices.push( new THREE.Vertex( v1 ) );
-            this.vertices.push( new THREE.Vertex( v2 ) );
-            this.vertices.push( new THREE.Vertex( v3 ) );
-            this.vertices.push( new THREE.Vertex( v4 ) );
+            this.vertices.push( v1 );
+            this.vertices.push( v2 );
+            this.vertices.push( v3 );
+            this.vertices.push( v4 );
         }
         
         for (i = 0; i < iVer; i ++) {
             this.faces.push( new THREE.Face3( i * 4, i * 4 + 1, i * 4 + 2 ) );
             this.faces.push( new THREE.Face3( i * 4, i * 4 + 2, i * 4 + 3 ) );
-            this.faceVertextUvs[ 0 ].push([
-                new THREE.UV(0, 1),
-                new THREE.UV(1, 1),
-                new THREE.UV(1, 0)
+            this.faceVertexUvs[ 0 ].push([
+                new THREE.Vector2(0, 1),
+                new THREE.Vector2(1, 1),
+                new THREE.Vector2(1, 0)
             ]);
-            this.faceVertextUvs[ 0 ].push([
-                new THREE.UV(0, 1),
-                new THREE.UV(1, 1),
-                new THREE.UV(0, 0)
+            this.faceVertexUvs[ 0 ].push([
+                new THREE.Vector2(0, 1),
+                new THREE.Vector2(1, 1),
+                new THREE.Vector2(0, 0)
             ]);
         }
-        this.computeCentroids();
+        // this.computeCentroids();
+        this.center();
         this.computeFaceNormals();
 
-        this.boundingSphere = { radius: outerRadius };
-    };
+        // this.boundingSphere = { radius: outerRadius };
+    }
 
     SaturnRings.prototype = new THREE.Geometry();
     SaturnRings.prototype.contructor = SaturnRings;

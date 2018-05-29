@@ -40,7 +40,7 @@ define(['sim/sim', 'js/static'], function(Sim, STATIC) {
     Planet.prototype.createGlobe = function(map) {
         var geometry = new THREE.SphereGeometry(1, 32, 32),
             texture = new THREE.TextureLoader().load(map),
-            material = new THREE.MeshPhongMaterial({texture: texture, color: 0x333333}),
+            material = new THREE.MeshPhongMaterial({map: texture, color: 0x333333}),
             globeMesh = new THREE.Mesh(geometry, material);
 
         this.planetGroup.add(globeMesh);

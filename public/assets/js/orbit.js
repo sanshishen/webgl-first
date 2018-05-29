@@ -14,8 +14,8 @@ define(['sim/sim', 'js/static'], function(Sim, STATIC) {
         for (i = 0; i < STATIC.Orbit.N_SEGMENTS; i ++) {
             var x = distance * Math.cos(i / STATIC.Orbit.N_SEGMENTS * twopi),
                 z = distance * Math.sin(i / STATIC.Orbit.N_SEGMENTS * twopi),
-                vertex = new THREE.Vertex(new THREE.Vector3(x, 0, z));
-            geometry.verteices.push(vertex);
+                vector = new THREE.Vector3(x, 0, z);
+            geometry.vertices.push(vector);
         }
         var material = new THREE.LineBasicMaterial({
             color: 0xffffff,

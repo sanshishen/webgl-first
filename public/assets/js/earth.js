@@ -7,6 +7,7 @@ define(['sim/sim', 'js/static', 'js/orbit'], function(Sim, STATIC, Orbit) {
     function Moon() {
         Sim.Object.call(this);
     }
+    Moon.prototype = new Sim.Object();
     Moon.prototype.init = function(param) {
         param = param || {};
         this.rotationSpeed = param.rotationSpeed || STATIC.Moon.ROTATION_SPEED;
@@ -107,9 +108,9 @@ define(['sim/sim', 'js/static', 'js/orbit'], function(Sim, STATIC, Orbit) {
             texture = new THREE.TextureLoader().load(earthMap),
             // material = new THREE.MeshBasicMaterial({map: texture}),
             material = new THREE.MeshPhongMaterial( {map: texture} ),
-            mesh = new THREE.Mesh( geometry, material );
-        mesh.rotation.z = STATIC.Earth.TILT;
-        this.earthGroup.add(mesh);
+            globeMesh = new THREE.Mesh( geometry, material );
+        globeMesh.rotation.z = STATIC.Earth.TILT;
+        this.earthGroup.add(globeMesh);
         this.globeMesh = globeMesh;
     };
     Earth.prototype.createClouds = function() {
