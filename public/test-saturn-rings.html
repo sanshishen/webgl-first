@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>测试土星环</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!-- sanshishen 2018-05-30 10:39:55 -->
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        #container {
+            position: absolute;
+            width: 95%;
+            height: 80%;
+            overflow: hidden;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script type="text/javascript" src="https://cdn.bootcss.com/three.js/90/three.js"></script>
+    <script type="text/javascript" src="./assets/lib/require-2.3.5.min.js"></script>
+    <script type="text/javascript" src="./assets/js/common.js"></script>
+    <script type="text/javascript">
+        require(['sim/sim', 'js/saturn-rings', 'jquery'], function (Sim, SaturnRings, $) {
+            function Sun() {
+                Sim.Object.call(this);
+            };
+
+            Sun.prototype = new Sim.Object();
+
+            Sun.prototype.init = function() {
+                // 创建一个点光源照向地球，设置光源位置为屏幕外部偏左一点
+                var light = new THREE.PointLight( 0xffffff, 2, 100 );
+                light.position.set( -10, 0, 20 );
+                this.setObject3D(light);
+            }
+            function SaturnRingsObj () {
+                Sim.Object.call(this);
+            }
+            SaturnRingsObj.prototype = new Sim.Object();
+            SaturnRingsObj.init = function() {
+                var ringsMap = '/assets/images/SatRing.png',
+                    geometry = new SaturnRings(1.1, 1.867, 64),
+                    texture = new THREE.TextureLoader().load(ringsMap),
+                    material = new THREE.MeshLambertMaterial({map: texture, transparent: true, color: 0xffffff}),
+                    ringsMesh = new THREE.Mesh(geometry, material);
+                ringsMesh.doubleSided = true;
+                ringsMesh.rotation.x = Math.PI / 2;
+                this.setObject3D(ringsMesh);
+            };
+            function SaturnRingsApp () {
+                Sim.App.call(this);
+            };
+            SaturnRingsApp.prototype = new Sim.App();
+            SaturnRingsApp.prototype.init = function(param) {
+                Sim.App.prototype.init.call(this, param);
+                var saturnRingsObj = new SaturnRingsObj();
+                saturnRingsObj.init();
+                this.addObject(saturnRingsObj);
+                var sun = new Sun();
+                sun.init();
+                this.addObject(sun);
+            };
+            $(document).ready(function() {
+                var container = document.getElementById('container'),
+                    app = new SaturnRingsApp();
+                app.init({container: container});
+                app.run();
+                console.log('it\'s failed, and i don\'t know why, fuck...');
+            })
+        });
+    </script>
+</body>
+</html>
