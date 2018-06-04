@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>a basic line.</title>
+    <title>Examples</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <!-- sanshishen 2018-06-01 17:38:06 -->
+    <!-- sanshishen 2018-06-03 00:33:15 -->
     <style type="text/css">
         #canvas-frame {
             width: 100%;
@@ -40,33 +40,15 @@
             camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
             camera.position.set(0, 1000, 0);
             camera.up.set(0, 0, 1);
-            /* camera.lookAt({
-                x: 0,
-                y: 0,
-                z: 0
-            }); */
             camera.lookAt(scene.position);
 
             light = new THREE.DirectionalLight(0xff0000, 1.0, 0);
             light.position.set(100, 100, 200);
             scene.add(light);
 
-            var geometry = new THREE.Geometry(),
-                material = new THREE.LineBasicMaterial({vertexColors: true}),
-                color1 = new THREE.Color(0x444444),
-                color2 = new THREE.Color(0xff0000);
-
-            var p1 = new THREE.Vector3(-100, 0, 100),
-                p2 = new THREE.Vector3(100, 0, -100);
-            geometry.vertices.push(p1);
-            geometry.vertices.push(p2);
-            geometry.colors.push(color1, color2);
-
-            var line = new THREE.LineSegments(geometry, material);
-            scene.add(line);
-
-            renderer.clear();
-            renderer.render(scene, camera);
+            var geometry = new THREE.Geometry();
+            geometry.vertices.push(new THREE.Vector3(-500, 0, 0));
+            geometry.vertices.push(new THREE.Vector3(500, 0, 0));
         };
     </script>
 </body>
