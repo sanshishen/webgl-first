@@ -2,13 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>line mesh.</title>
+    <title>Directional Light</title>
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    <!-- sanshishen 2018-06-03 00:33:15 -->
+    <!-- sanshishen 2018-06-05 16:23:29 -->
     <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
         #canvas-frame {
             width: 100%;
             height: 600px;
@@ -22,45 +26,32 @@
     <div id="canvas-frame"></div>
     <script type="text/javascript" src="//cdn.bootcss.com/three.js/92/three.js"></script>
     <script type="text/javascript">
-        var renderer,
-            camera,
-            scene,
-            light;
+        var renderer, scene, camera;
         document.body.onload = function() {
             var container = document.querySelector('#canvas-frame'),
                 width = container.clientWidth,
                 height = container.clientHeight;
-            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer = new THREE.WebGLRenderer({antialias: true});
             renderer.setSize(width, height);
-            container.appendChild(renderer.domElement);
             renderer.setClearColor(0xffffff, 1.0);
+            container.appendChild(renderer.domElement);
+
+            camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
+            camera.position.set(600, 0, 600);
+            camera.lookAt(new THREE.Vector3(0, 0, 0));
 
             scene = new THREE.Scene();
 
-            camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
-            camera.position.set(0, 1000, 0);
-            camera.up.set(0, 0, 1);
-            // camera.lookAt(scene.position);
-            camera.lookAt(new THREE.Vector3(0, 0, 0));
+            var light1 = new THREE.DirectionalLight(0xff0000, 1);
+            light1.position.set(1, 0, 0.5);
+            scene.add(light1);
 
-            light = new THREE.DirectionalLight(0xff0000, 1.0, 0);
-            light.position.set(100, 100, 200);
-            scene.add(light);
-
-            var geometry = new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3(-500, 0, 0));
-            geometry.vertices.push(new THREE.Vector3(500, 0, 0));
-
-            for (var i = 0; i <= 20; i ++) {
-                var line = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({color: 0xff0000, opacity: 0.1}));
-                line.position.z = (i * 50) - 500;
-                scene.add(line);
-
-                var line = new THREE.LineSegments(geometry, new THREE.LineBasicMaterial({color: 0xff0000, opacity: 0.1}));
-                line.position.x = (i * 50) - 500;
-                line.rotation.y = 90 * Math.PI / 180;
-                scene.add(line);
-            }
+            var geometry = new THREE.CubeGeometry(200, 100, 50, 4, 4),
+                material = new THREE.MeshLambertMaterial({color: 0xffffff}),
+                mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(0, 0, 0);
+            scene.add(mesh);
+            renderer.clear();
             renderer.render(scene, camera);
         };
     </script>
