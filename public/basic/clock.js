@@ -4,6 +4,7 @@
  * @date    2018-06-06 11:17:02
  * @version 1.0.0
  */
+var canvas;
 function CanvasObject() {
     this.x = 0;
     this.y = 0;
@@ -53,7 +54,7 @@ function clock(canvas) {
     canvas = document.createElement('canvas');
     canvas.width = 200;
     canvas.height = 200;
-    document.body.appendChild(canvas);
+    // document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d'),
         timerId,
         frameRate = 60;
