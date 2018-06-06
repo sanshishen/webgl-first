@@ -66,7 +66,7 @@
             // 然后创建一个Phong材质来处理着色，并传递给纹理映射
             var material = new THREE.MeshPhongMaterial( { map: map } );
 
-            // 创建一个立方体的几何体
+            // 创建一个立方体的几何体，CubeGeometry已经废弃，应使用BoxGeometry
             var geometry = new THREE.CubeGeometry( 1, 1, 1 );
 
             // 将几何体和材质放到一个网格中

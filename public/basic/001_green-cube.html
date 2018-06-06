@@ -22,6 +22,9 @@
 <body>
     <script type="text/javascript" src="//cdn.bootcss.com/three.js/92/three.js"></script>
     <script type="text/javascript">
+        /**
+         * 示例转自WebGL中文网(www.hewebgl.com)
+         */
         var scene = new THREE.Scene();
 
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -31,7 +34,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         document.body.appendChild(renderer.domElement);
-
+        // CubeGeometry已经废弃，应使用BoxGeometry
         var geometry = new THREE.CubeGeometry(1, 1, 1),
             material = new THREE.MeshBasicMaterial({color: 0x00ff00}),
             cube = new THREE.Mesh(geometry, material);
