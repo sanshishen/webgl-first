@@ -50,10 +50,10 @@ Circle.prototype.draw = function(ctx) {
     ctx.arc(0, 0, this.radius, 0, 2 * Math.PI, true);
     ctx.closePath();
 };
-function clock(canvas) {
+function clock() {
     canvas = document.createElement('canvas');
-    canvas.width = 200;
-    canvas.height = 200;
+    canvas.width = 128;
+    canvas.height = 128;
     // document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d'),
         timerId,
@@ -62,52 +62,53 @@ function clock(canvas) {
     // 表盘
     var circle = new Circle();
     circle.ctx = ctx;
-    circle.x = 100;
-    circle.y = 100;
-    circle.radius = 90;
+    circle.x = 64;
+    circle.y = 64;
+    circle.radius = 60;
     circle.fill = true;
-    circle.borderWidth = 6;
+    circle.borderWidth = 1.5;
+    circle.borderColor = '#333333';
     circle.fillColor = '#ffffff';
 
     // 小时
     var hour = new Line();
     hour.ctx = ctx;
-    hour.x = 100;
-    hour.y = 100;
-    hour.borderColor = '#000000';
-    hour.borderWidth = 10;
+    hour.x = 64;
+    hour.y = 64;
+    hour.borderColor = '#333333';
+    hour.borderWidth = 3;
     hour.rotation = 0;
-    hour.start = [0, 20];
-    hour.end = [0, -50];
+    hour.start = [0, 10];
+    hour.end = [0, -25];
 
     // 分钟
     var minute = new Line();
     minute.ctx = ctx;
-    minute.x = 100;
-    minute.y = 100;
+    minute.x = 64;
+    minute.y = 64;
     minute.borderColor = '#333333';
-    minute.borderWidth = 7;
+    minute.borderWidth = 3;
     minute.rotation = 0;
-    minute.start = [0, 20];
-    minute.end = [0, -70];
+    minute.start = [0, 10];
+    minute.end = [0, -35];
 
     // 秒
     var second = new Line();
     second.ctx = ctx;
-    second.x = 100;
-    second.y = 100;
+    second.x = 64;
+    second.y = 64;
     second.borderColor = '#ff0000';
-    second.borderWidth = 4;
+    second.borderWidth = 2;
     second.rotation = 0;
-    second.start = [0, 20];
-    second.end = [0, -80];
+    second.start = [0, 10];
+    second.end = [0, -45];
 
     // 中心
     var center = new Circle();
     center.ctx = ctx;
-    center.x = 100;
-    center.y = 100;
-    center.radius = 5;
+    center.x = 64;
+    center.y = 64;
+    center.radius = 3;
     center.fill = true;
     center.borderColor = 'orange';
 
@@ -116,22 +117,22 @@ function clock(canvas) {
     for (var i = 0; i < 12; i ++) {
         var scale = new Line();
         scale.ctx = ctx;
-        scale.x = 100;
-        scale.y = 100;
+        scale.x = 64;
+        scale.y = 64;
         scale.borderColor = 'orange';
-        scale.borderWidth = 2;
+        scale.borderWidth = 1;
         scale.rotation = i * 30;
-        scale.start = [0, -70];
-        scale.end = [0, -80];
+        scale.start = [0, -45];
+        scale.end = [0, -50];
         scales.push(scale);
     }
 
     timerId = setInterval(function() {
         // 清除画布
-        ctx.clearRect(0, 0, 200, 200);
+        ctx.clearRect(0, 0, 128, 128);
         // 填充背景色
         ctx.fillStyle = 'orange';
-        ctx.fillRect(0, 0, 200, 200);
+        ctx.fillRect(0, 0, 128, 128);
         // 表盘
         circle.update();
         // 刻度
